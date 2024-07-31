@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import './App.css';
+import './App.css'; // Make sure to include the styles for the font family
 
-// Importing the font
-const fontImport = document.createElement('style');
-fontImport.textContent = `@import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;700&display=swap');`;
-document.head.appendChild(fontImport);
-
-const Nodeplot = () => {
+const ScatterPlot = () => {
   const [activeChart, setActiveChart] = useState('INR');
   const svgRef = useRef();
 
@@ -17,7 +12,7 @@ const Nodeplot = () => {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  // Updated data
+  // Hardcoded data
   const rawData = [
     { company: 'BYJUS', designation: 'Software Engineer', location: 'Bengaluru', salaryUSD: 26506, salaryINR: 2202649, experience: 4.0 },
     { company: 'Urban Company', designation: 'Senior Software Engineer', location: 'Gurugram', salaryUSD: 36145, salaryINR: 3003650, experience: 3.0 },
@@ -43,23 +38,17 @@ const Nodeplot = () => {
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const xScale = d3.scaleLinear()
-      .domain([1.5, 4.5])
+      .domain([1.5, 5.5])
       .range([0, innerWidth]);
 
     const yScale = d3.scaleLinear()
-      .domain(activeChart === 'INR' ? [0, 3500000] : [0, 40000])
+      .domain(activeChart === 'INR' ? [0, 4000000] : [0, 50000])
       .range([innerHeight, 0]);
 
     // X-axis
     const xAxis = g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(xScale).tickValues([1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]));
-
-    xAxis.selectAll("path")
-      .attr('stroke', 'grey');
-
-    xAxis.selectAll("line")
-      .attr('stroke', 'grey');
+      .call(d3.axisBottom(xScale).tickValues([1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5]));
 
     xAxis.append('text')
       .attr('x', innerWidth / 2)
@@ -71,14 +60,8 @@ const Nodeplot = () => {
     // Y-axis
     const yAxis = g.append('g')
       .call(activeChart === 'INR' 
-        ? d3.axisLeft(yScale).tickValues([0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000])
-        : d3.axisLeft(yScale).tickValues([0, 10000, 20000, 30000, 40000]));
-
-    yAxis.selectAll("path")
-      .attr('stroke', 'grey');
-
-    yAxis.selectAll("line")
-      .attr('stroke', 'grey');
+        ? d3.axisLeft(yScale).tickValues([0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000])
+        : d3.axisLeft(yScale).tickValues([0, 10000, 20000, 30000, 40000, 50000]));
 
     yAxis.append('text')
       .attr('transform', 'rotate(-90)')
@@ -138,8 +121,8 @@ const Nodeplot = () => {
           .duration(200)
           .style("opacity", .9);
         tooltip.html(`Company: ${d.company}<br/>
-                      Designation: ${d.designation}<br/>
-                      Location: ${d.location}<br/>
+                      Role: ${d.role}<br/>
+                      City: ${d.city}<br/>
                       Experience: ${d.experience} years<br/>
                       Salary (${activeChart}): ${activeChart === 'INR' ? d.salaryINR.toLocaleString() : d.salaryUSD.toLocaleString()}`)
           .style("left", (event.pageX + 10) + "px")
@@ -191,23 +174,9 @@ const Nodeplot = () => {
     color: 'black',
   };
 
-  // Inline styles
-  const appStyle = {
-    textAlign: 'center',
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '10px',
-    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-    fontFamily: 'Onest, sans-serif'
-  };
-
-  const h1Style = {
-    color: '#333'
-  };
-
   return (
-    <div style={appStyle}>
-      <h1 style={h1Style}>Salary vs Experience Chart</h1>
+    <div className="App" style={{ fontFamily: 'Onest' }}>
+      <h1>Salary vs Experience Chart</h1>
       <div>
         <button 
           style={activeChart === 'INR' ? activeButtonStyle : inactiveButtonStyle}
@@ -227,4 +196,4 @@ const Nodeplot = () => {
   );
 };
 
-export default Nodeplot;
+export default ScatterPlot;
