@@ -6,8 +6,8 @@ const ScatterPlot = () => {
   const [activeChart, setActiveChart] = useState('INR');
   const svgRef = useRef();
 
-  const width = 600;
-  const height = 400;
+  const width = 900;
+  const height = 600;
   const margin = { top: 40, right: 40, bottom: 60, left: 100 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
@@ -50,11 +50,16 @@ const ScatterPlot = () => {
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale).tickValues([1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5]));
 
+      xAxis.selectAll("text")
+      .attr('font-size', '12px')
+      .attr('font-family', 'Onest');
+
     xAxis.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', 40)
       .attr('fill', 'black')
       .attr('font-family', 'Onest')
+      .attr('font-size', '16px')
       .text('Years of Experience');
 
     // Y-axis
@@ -63,15 +68,19 @@ const ScatterPlot = () => {
         ? d3.axisLeft(yScale).tickValues([0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000])
         : d3.axisLeft(yScale).tickValues([0, 10000, 20000, 30000, 40000, 50000]));
 
+        yAxis.selectAll("text")
+        .attr('font-size', '12px')
+        .attr('font-family', 'Onest');
+
     yAxis.append('text')
       .attr('transform', 'rotate(-90)')
-      .attr('y', -margin.left + 20)
+      .attr('y', -margin.left + 0)
       .attr('x', -innerHeight / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
       .attr('font-family', 'Onest')
       .attr('fill', 'black')
-      .attr('font-size', '12px')
+      .attr('font-size', '16px')
       .text(`Current Salary (${activeChart})`);
 
     // Grid lines
@@ -121,8 +130,8 @@ const ScatterPlot = () => {
           .duration(200)
           .style("opacity", .9);
         tooltip.html(`Company: ${d.company}<br/>
-                      Role: ${d.role}<br/>
-                      City: ${d.city}<br/>
+                      Role: ${d.designation}<br/>
+                      City: ${d.location}<br/>
                       Experience: ${d.experience} years<br/>
                       Salary (${activeChart}): ${activeChart === 'INR' ? d.salaryINR.toLocaleString() : d.salaryUSD.toLocaleString()}`)
           .style("left", (event.pageX + 10) + "px")
@@ -144,7 +153,7 @@ const ScatterPlot = () => {
       .attr('y', d => yScale(activeChart === 'INR' ? d.salaryINR : d.salaryUSD) - 10)
       .attr('text-anchor', 'middle')
       .attr('font-family', 'Onest')
-      .attr('font-size', '10px')
+      .attr('font-size', '14px')
       .attr('fill', '#005dff')
       .text(d => d.company);
 
@@ -176,7 +185,7 @@ const ScatterPlot = () => {
 
   return (
     <div className="App" style={{ fontFamily: 'Onest' }}>
-      <h1>Salary vs Experience Chart</h1>
+      
       <div>
         <button 
           style={activeChart === 'INR' ? activeButtonStyle : inactiveButtonStyle}
